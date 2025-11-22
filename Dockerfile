@@ -3,7 +3,6 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# System dependencies (Chrome, PostgreSQL, OpenCV)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     libpq-dev \
@@ -29,8 +28,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY download_models.py .
 RUN python download_models.py
 
-# Copy full project
+# Copy all project files
 COPY . .
 
-# Start Django with Gunicorn on Railway
+# -------------------------
+# IMPORTANT: add entrypoint
+# -------------------------
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default CMD → Gunicorn Django server
 CMD ["gunicorn", "BLSSPAIN.wsgi:application", "--bind", "0.0.0.0:8000"]
