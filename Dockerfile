@@ -39,4 +39,5 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Default CMD → Gunicorn Django server
-CMD ["gunicorn", "BLSSPAIN.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "BLSSPAIN.wsgi:application", "--bind", "0.0.0.0:$PORT"]
+
