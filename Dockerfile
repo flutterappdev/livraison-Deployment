@@ -40,5 +40,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # Default CMD → Gunicorn Django server
 # CMD ["gunicorn", "BLSSPAIN.wsgi:application", "--bind", "0.0.0.0:$PORT"]
-CMD gunicorn BLSSPAIN.wsgi:application --bind 0.0.0.0:$PORT
+# Shell form so $PORT expands
+CMD gunicorn BLSSPAIN.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 180
+
 
