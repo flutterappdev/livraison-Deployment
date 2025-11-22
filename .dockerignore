@@ -1,0 +1,51 @@
+# .dockerignore
+
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+railway.json
+
+# Environnement Virtuel
+venv/
+.venv/
+
+# Python Caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Base de données locale
+*.sqlite3
+bls
+
+# Fichiers statiques et médias locaux (ils seront gérés par des volumes)
+staticfiles/
+media/
+
+# Fichiers de configuration IDE
+.idea/
+.vscode/
+*.swp
+
+# Fichiers de dépendances et de build locaux
+pip-wheel-metadata/
+build/
+dist/
+*.egg-info
+
+# Fichiers de système d'exploitation
+.DS_Store
+Thumbs.db
+
+# Fichiers de log
+*.log
+
+# Fichiers de test et de couverture
+.pytest_cache/
+.coverage
+htmlcov/

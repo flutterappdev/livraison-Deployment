@@ -1,0 +1,109 @@
+/* Style pour les badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Style pour le tableau des organisations */
+#result_list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#result_list th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+#result_list td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#result_list tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Style pour les liens dans le tableau */
+#result_list a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#result_list a:hover {
+    text-decoration: underline;
+}
+
+.waiting-otp {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Style pour les tâches en attente d'OTP */
+tr.waiting-otp td {
+    background-color: #fff3cd !important;
+}
+
+tr.waiting-otp td:first-child {
+    border-left: 4px solid #ffc107;
+}
+
+/* Style pour le formulaire OTP */
+.field-otp input {
+    font-family: monospace;
+    letter-spacing: 5px;
+    border: 2px solid #ffc107;
+}
+
+.field-otp input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ffc107;
+}
+
+/* Style pour le message d'alerte */
+.alert-otp {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style pour le bouton de soumission */
+.submit-row input[type="submit"] {
+    background-color: #ffc107;
+    color: black;
+}
+
+.submit-row input[type="submit"]:hover {
+    background-color: #e0a800;
+} 

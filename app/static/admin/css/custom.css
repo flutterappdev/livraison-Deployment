@@ -1,0 +1,36 @@
+/* Style pour les badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Style pour les formulaires */
+.form-row {
+    margin-bottom: 1em;
+}
+
+/* Style pour les champs de formulaire */
+.field-box {
+    padding: 10px;
+}
+
+/* Style pour les messages d'erreur */
+.errorlist {
+    color: #dc3545;
+    padding-left: 0;
+    list-style: none;
+}
+
+/* Style pour les champs obligatoires */
+.required label:after {
+    content: "*";
+    color: #dc3545;
+    margin-left: 4px;
+} 

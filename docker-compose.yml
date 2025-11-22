@@ -1,0 +1,111 @@
+# ./docker-compose.yml
+version: '3.8'
+
+services:
+  redis:
+    image: "redis:7-alpine"
+    container_name: bls_redis
+    ports:
+      - "127.0.0.1:6380:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks: # <-- AJOUT
+      - bls_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  db:
+    image: postgres:15-alpine
+    container_name: bls_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: bls_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5436:5432"
+    restart: unless-stopped
+    networks: # <-- AJOUT
+      - bls_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${SQL_USER} -d ${SQL_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  web:
+    build:
+      context: .
+      args: # <-- AJOUTER CETTE SECTION
+          HTTP_PROXY: http://d8c2093423e68ce3105c:f5f739e472334861@gw.dataimpulse.com:823
+          HTTPS_PROXY: https://d8c2093423e68ce3105c:f5f739e472334861@gw.dataimpulse.com:823
+    container_name: bls_web
+    # La commande gère toute la logique d'initialisation
+    command: >
+      sh -c "
+        # Étape 1: Appliquer les migrations
+        echo 'Application des migrations...'
+        python manage.py migrate --noinput
+
+        # Étape 2: Collecter les fichiers statiques
+        echo 'Collecte des fichiers statiques...'
+        python manage.py collectstatic --noinput --clear
+        
+        # Étape 3: Créer le superutilisateur en utilisant notre commande de gestion
+        echo 'Création du superutilisateur (si nécessaire)...'
+        python manage.py create_superuser_if_not_exists
+
+        # Étape 4: Lancer Gunicorn, le processus principal
+        echo 'Démarrage de Gunicorn...'
+        exec gunicorn BLSSPAIN.wsgi:application --bind 0.0.0.0:8016 --workers 4 --limit-request-field_size 0
+      "
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "127.0.0.1:8016:8016"
+    env_file:
+      - ./.env
+    networks: # <-- AJOUT
+      - bls_network
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: always
+    
+
+  celery_worker:
+    build:
+      context: .
+      args: # <-- AJOUTER CETTE SECTION
+          HTTP_PROXY: http://d8c2093423e68ce3105c:f5f739e472334861@gw.dataimpulse.com:823
+          HTTPS_PROXY: https://d8c2093423e68ce3105c:f5f739e472334861@gw.dataimpulse.com:823
+    container_name: bls_celery_worker
+    
+    command: ["celery", "-A", "BLSSPAIN", "worker", "-l", "info", "--pool=prefork"]
+
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - web # Attendre que le service web soit démarré (et donc que les migrations soient faites)
+    restart: always
+    networks: # <-- AJOUT
+      - bls_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+# 6. Définition du Réseau Personnalisé
+networks: # <-- AJOUT DE TOUTE CETTE SECTION
+  bls_network:
+    driver: bridge

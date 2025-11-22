@@ -1,0 +1,49 @@
+name: Deploy BLS to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # L'environnement où l'action s'exécute (pas votre VPS)
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v1
+        with:
+          host: 212.132.99.71
+          username: root
+          password: lN2mExJY
+          source: "*"
+          target: /var/www/bls
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Run remote command on VPS
+        run: |
+
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: 212.132.99.71
+          VPS_USER: root
+          WORK_DIR: /var/www/bls
+        run: |
+          echo "Connecting to ${VPS_USER}@${VPS_HOST}..." 
+
+          sshpass -p "lN2mExJY" ssh -o StrictHostKeyChecking=no root@212.132.99.71 << 'EOF'
+            echo "Connected to VPS. Current directory: $(pwd)"
+            
+            cd /var/www/bls
+            echo "Changed to directory: $(pwd)"
+
+            echo "Stopping existing containers..."
+            docker compose down
+
+            echo "Building and starting new containers..."
+            docker compose up -d --build --remove-orphans
+
+            echo "Deployment finished!"
+          EOF

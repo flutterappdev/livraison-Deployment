@@ -1,0 +1,41 @@
+# Base Django
+django
+gunicorn
+whitenoise
+psycopg2-binary
+
+# Celery & Redis
+celery
+redis
+django-redis
+flower
+
+# Sécurité
+django-encrypted-model-fields
+cryptography
+
+# Selenium & Webdriver
+selenium
+webdriver_manager
+selenium_authenticated_proxy
+
+# Utilitaires
+pillow
+requests
+django-countries
+
+# easyocr
+# torch
+# torchvision
+# --- CORRECTION DES VERSIONS OCR ---
+# Épingler tensorflow et keras à des versions compatibles avec keras-ocr
+tensorflow-cpu==2.15.0
+keras==2.15.0
+keras-ocr
+
+# --- SOLUTION : FIXER LA VERSION DE NUMPY ---
+# Forcer une version de NumPy antérieure à la 2.0 pour la compatibilité avec imgaug/keras-ocr
+numpy<2.0
+# ------------------------------------------
+
+selenium-stealth
