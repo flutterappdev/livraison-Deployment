@@ -85,7 +85,7 @@ if DB_ENGINE:
             'USER': os.getenv('SQL_USER'),
             'PASSWORD': os.getenv('SQL_PASSWORD'),
             'HOST': os.getenv('SQL_HOST'),
-            'PORT': os.getenv('SQL_PORT', 5432),
+            'PORT': int(os.getenv('SQL_PORT', 5432)),
         }
     }
 else:
